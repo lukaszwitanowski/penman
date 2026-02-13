@@ -7,6 +7,7 @@ DEFAULT_OUTPUT_DIR = Path("transcripts")
 DEFAULT_SEGMENT_DIR = Path("temp_segments")
 DEFAULT_SEGMENT_SECONDS = 300
 DEFAULT_MODEL = "turbo"
+DEFAULT_YT_DOWNLOAD_DIR = Path("yt_downloads")
 DEFAULT_INPUT_FORMAT = "auto"
 DEFAULT_OUTPUT_FORMAT = "txt"
 DEFAULT_LANGUAGE = "auto"
@@ -53,4 +54,11 @@ INPUT_FILE_DIALOG_TYPES = [
     ("Audio files", "*.mp3 *.wav *.m4a *.flac *.ogg"),
     ("Video files", "*.mp4 *.mkv *.mov *.avi *.webm"),
     ("All files", "*.*"),
+]
+
+YOUTUBE_URL_PATTERNS = [
+    r"(?:https?://)?(?:www\.)?youtube\.com/watch\?v=",
+    r"(?:https?://)?youtu\.be/",
+    r"(?:https?://)?(?:www\.)?youtube\.com/shorts/",
+    r"(?:https?://)?(?:www\.)?youtube\.com/live/",
 ]

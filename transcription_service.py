@@ -264,6 +264,7 @@ def run_transcription(
     progress_callback: ProgressCallback | None = None,
     cancel_event: Any | None = None,
     keep_segments: bool = False,
+    extra_metadata: dict[str, Any] | None = None,
 ) -> Path:
     if shutil.which("ffmpeg") is None:
         raise TranscriptionError(
@@ -302,18 +303,22 @@ def run_transcription(
             cancel_event=cancel_event,
         )
 
+        metadata = {
+            "source_file": str(source_file),
+            "input_format": detected_input_format,
+            "language": language,
+            "model_name": model_name,
+            "compute_device_requested": compute_device,
+            "compute_device_used": resolved_device,
+            "created_at": datetime.now(timezone.utc).astimezone().isoformat(),
+            "segments_count": len(transcribed["segments"]),
+            "detected_languages": transcribed["detected_languages"],
+        }
+        if extra_metadata:
+            metadata.update(extra_metadata)
+
         payload = {
-            "metadata": {
-                "source_file": str(source_file),
-                "input_format": detected_input_format,
-                "language": language,
-                "model_name": model_name,
-                "compute_device_requested": compute_device,
-                "compute_device_used": resolved_device,
-                "created_at": datetime.now(timezone.utc).astimezone().isoformat(),
-                "segments_count": len(transcribed["segments"]),
-                "detected_languages": transcribed["detected_languages"],
-            },
+            "metadata": metadata,
             "segments": transcribed["segments"],
             "full_text": transcribed["full_text"],
         }
